@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models;
-use App\Model\User;
-use App\Model\Meal;
+use App\Models\User;
+use App\Models\Meal;
+
 use Illuminate\Database\Eloquent\Model;
 
 class MealPlan extends Model

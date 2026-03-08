@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Models\Meal;
-use App\Model\Goal;
-use App\Model\MealPlan;
+use App\Models\Goal;
+use App\Models\MealPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 use App\Models\User;
-use App\Model\Ingredient;
-use App\Model\MealPlan;
+use App\Models\Ingredient;
+use App\Models\MealPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,7 +16,7 @@ class Meal extends Model
         return $this->belongsTo(User::class); 
     } 
     public function ingredients () {
-        return $this->belongsToMany(Ingredient::class);
+        return $this->belongsToMany(Ingredient::class, 'meal_ingredient');
     }
     public function mealPlans () {
         return $this->hasMany(MealPlan::class);

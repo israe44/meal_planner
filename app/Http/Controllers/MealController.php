@@ -35,14 +35,14 @@ class MealController extends Controller
 
 
     public function update (Request $request, $id) {
-        $request->validate([
+        $validated=$request->validate([
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'sometimes|required|in:breakfast,lunch,dinner,snack',
             'user_id' => 'sometimes|required|exists:users,id',
         ]);
         $meal = Meal::find($id);
-        $meal->update($request->validated());
+        $meal->update($validated);
         return response()->json($meal);
     }
 

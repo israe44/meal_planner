@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Model\Meal;
+use App\Models\Meal;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +11,6 @@ class Ingredient extends Model
     protected $fillable = ['name', 'calories', 'unit'];
     
     public function meals () {
-        return $this->belongsToMany(Meal::class);
+        return $this->belongsToMany(Meal::class, 'meal_ingredient');
     }
 }
