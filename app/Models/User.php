@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Meal;
+use App\Model\Goal;
+use App\Model\MealPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,6 +27,12 @@ class User extends Authenticatable
     ];
     public function meals () {
         return $this->hasMany(Meal::class);
+    }
+    public function goals () {
+        return $this->belongsToMany(Goal::class);
+    }
+    public function mealPlans () {
+        return $this->hasMany(MealPlan::class);
     }
 
     /**
