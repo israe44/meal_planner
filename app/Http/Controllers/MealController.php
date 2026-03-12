@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class MealController extends Controller
 {
     public function index() {
-        $meals = Meal::with('ingredients')->get();
+        $meals = Meal::with('ingredients')->where('user_id', auth()->id())->get(); // only return the logged-in user's meals
         return response()->json($meals);
     }
 #shorcut for validation : $meal = Meal::create($request->validated());
@@ -16,20 +16,19 @@ class MealController extends Controller
             'name' => 'required|string|max:255', //max 255 characters
             'description' => 'nullable|string', //can be empty
             'category' => 'required|in:breakfast,lunch,dinner,snack', //must be one of these values
-            'user_id' => 'required|exists:users,id', //must exists in users table
         ]);
         $meal = Meal::create([
             'name' => $request->name,
             'description' => $request->description,
             'category' => $request->category,
-            'user_id' => $request->user_id,
+            'user_id' => auth()->id(), // always use the logged-in user's id, never trust user input for this
         ]);
         return response()->json($meal);
         
     }
 
     public function show ($id) {
-        $meal = Meal::with('ingredients', 'user')->find($id);
+        $meal = Meal::with('ingredients', 'user')->findOrFail($id); // returns 404 automatically if not found
         return response()->json($meal);
     }
 
@@ -39,15 +38,14 @@ class MealController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'sometimes|required|in:breakfast,lunch,dinner,snack',
-            'user_id' => 'sometimes|required|exists:users,id',
         ]);
-        $meal = Meal::find($id);
+        $meal = Meal::findOrFail($id); // returns 404 automatically if not found
         $meal->update($validated);
         return response()->json($meal);
     }
 
     public function destroy ($id) {
-        $meal = Meal::find($id);
+        $meal = Meal::findOrFail($id); // returns 404 automatically if not found
         $meal->delete();
         return response()->json(['message' => 'Meal deleted successfully']);
     }
