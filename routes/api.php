@@ -28,3 +28,11 @@ Route::delete('/ingredients/{id}', [IngredientController::class, 'destroy']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
+// GOAL routes
+Route::get('/goals', [GoalController::class, 'index']);
+Route::post('/goals', [GoalController::class, 'store']);
+Route::get('/goals/{id}', [GoalController::class, 'show']);
+Route::put('/goals/{id}', [GoalController::class, 'update']);
+Route::delete('/goals/{id}', [GoalController::class, 'destroy']);
+
