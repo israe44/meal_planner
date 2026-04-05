@@ -36,3 +36,9 @@ Route::get('/goals/{id}', [GoalController::class, 'show']);
 Route::put('/goals/{id}', [GoalController::class, 'update']);
 Route::delete('/goals/{id}', [GoalController::class, 'destroy']);
 
+// MEAL PLANNER routes
+Route::get('/meal-plans', [MealPlannerController::class, 'index']);
+Route::post('/meal-plans', [MealPlannerController::class, 'store']);
+Route::get('/meal-plans/{id}', [MealPlannerController::class, 'show']);
+Route::put('/meal-plans/{id}', [MealPlannerController::class, 'update']);
+Route::delete('/meal-plans/{id}', [MealPlannerController::class, 'destroy']);
