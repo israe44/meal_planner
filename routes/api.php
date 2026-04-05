@@ -23,12 +23,6 @@ Route::post('/ingredients', [IngredientController::class, 'store']);
 Route::get('/ingredients/{id}', [IngredientController::class, 'show']);
 Route::put('/ingredients/{id}', [IngredientController::class, 'update']);
 Route::delete('/ingredients/{id}', [IngredientController::class, 'destroy']);
-});
-
-
-//AUTH routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
 
 
 // GOAL routes
@@ -39,8 +33,20 @@ Route::put('/goals/{id}', [GoalController::class, 'update']);
 Route::delete('/goals/{id}', [GoalController::class, 'destroy']);
 
 // MEAL PLANNER routes
-Route::get('/meal-plans', [MealPlannerController::class, 'index']);
-Route::post('/meal-plans', [MealPlannerController::class, 'store']);
-Route::get('/meal-plans/{id}', [MealPlannerController::class, 'show']);
-Route::put('/meal-plans/{id}', [MealPlannerController::class, 'update']);
-Route::delete('/meal-plans/{id}', [MealPlannerController::class, 'destroy']);
+Route::get('/meal-plans', [MealPlanController::class, 'index']);
+Route::post('/meal-plans', [MealPlanController::class, 'store']);
+Route::get('/meal-plans/{id}', [MealPlanController::class, 'show']);
+Route::put('/meal-plans/{id}', [MealPlanController::class, 'update']);
+Route::delete('/meal-plans/{id}', [MealPlanController::class, 'destroy']);
+});
+
+
+
+
+
+
+
+
+//AUTH routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
