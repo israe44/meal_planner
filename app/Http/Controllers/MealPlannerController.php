@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Models\MealPlan;
+use Illuminate\Http\Request;
+
+class MealPlanController extends Controller
+{
+    
+    public function index() {
+        $mealPlans = MealPlan::where('user_id', auth()->id())
+                             ->with('meal')
+                             ->get();
+        return response()->json($mealPlans);
+    }
+
+    public function store(Request $request) {
+        $request->validate([
+            'meal_id' => 'required|exists:meals,id',
+            'date'    => 'required|date',
+        ]);
+
+        $mealPlan = MealPlan::create([
+            'user_id' => auth()->id(),
+            'meal_id' => $request->meal_id,
+            'date'    => $request->date,
+        ]);
+
+        return response()->json($mealPlan, 201);
+    }
+    public function show($id) {
+        $mealPlan = MealPlan::with('meal', 'user')->findOrFail($id);
+        return response()->json($mealPlan);
+    }
+
+    public function update(Request $request, $id) {
+        $validated = $request->validate([
+            'meal_id' => 'sometimes|required|exists:meals,id',
+            'date'    => 'sometimes|required|date',
+        ]);
+
+        $mealPlan = MealPlan::findOrFail($id);
+        $mealPlan->update($validated);
+
+        return response()->json($mealPlan);
+    }
+    public function destroy($id) {
+        $mealPlan = MealPlan::findOrFail($id);
+        $mealPlan->delete();
+
+        return response()->json(['message' => 'Meal plan deleted successfully']);
+    }
+}
