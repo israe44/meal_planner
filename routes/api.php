@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\GoalController;
+use App\Http\Controllers\MealPlanController;
 
 Route::middleware('auth:sanctum')->group(function(){
 
