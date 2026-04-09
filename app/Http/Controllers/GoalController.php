@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 class GoalController extends Controller
 {
     public function index () {
-$goal = Goal::all(); //get all goals from db
-return response()->json($goal);
+        $goals = auth()->user()->goals; // Only return the logged-in user's goals
+        return response()->json($goals);
     }
     public function store(Request $request) {
         $request->validate([
@@ -21,6 +21,8 @@ return response()->json($goal);
             'name' => $request->name,
             'type' => $request->type,
         ]);
+        // Attach the goal to the authenticated user
+        auth()->user()->goals()->attach($goal->id);
         return response()->json($goal, 201); //201 created
     }
 
@@ -35,11 +37,19 @@ return response()->json($goal);
         ]);
 
         $goal = Goal::findOrFail($id);
+        // Ownership check: only allow if user owns the goal
+        if (!auth()->user()->goals->contains($goal->id)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $goal->update($validated);
         return response()->json($goal);
     }
     public function destroy($id) {
         $goal = Goal::findOrFail($id);
+        // Ownership check: only allow if user owns the goal
+        if (!auth()->user()->goals->contains($goal->id)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $goal->delete();
         return response()->json(['message' => 'Goal deleted successfully']);
     }

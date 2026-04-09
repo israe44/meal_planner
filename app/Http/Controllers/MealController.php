@@ -58,4 +58,29 @@ class MealController extends Controller
         $meal->delete();
         return response()->json(['message' => 'Meal deleted successfully']);
     }
+
+    public function attachIngredient(Request $request, $id) {
+        $request->validate([
+            'ingredient_id' => 'required|exists:ingredients,id',
+            'quantity' => 'required|numeric|min:0.1',
+        ]);
+
+        $meal = Meal::findOrFail($id);
+        if ($meal->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $meal->ingredients()->attach($request->ingredient_id, ['quantity' => $request->quantity]);
+        return response()->json(['message' => 'Ingredient attached successfully', 'meal' => $meal->load('ingredients')], 201);
+    }
+
+    public function detachIngredient($id, $ingredientId) {
+        $meal = Meal::findOrFail($id);
+        if ($meal->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $meal->ingredients()->detach($ingredientId);
+        return response()->json(['message' => 'Ingredient detached successfully', 'meal' => $meal->load('ingredients')]);
+    }
 }
