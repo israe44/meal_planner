@@ -53,4 +53,25 @@ class GoalController extends Controller
         $goal->delete();
         return response()->json(['message' => 'Goal deleted successfully']);
     }
+    // Assign a goal to the logged-in user
+    public function assignGoal($id) {
+        $goal = Goal::findOrFail($id);
+        $user = auth()->user();
+        if ($user->goals->contains($goal->id)) {
+            return response()->json(['message' => 'Goal already assigned'], 409);
+        }
+        $user->goals()->attach($goal->id);
+        return response()->json(['message' => 'Goal assigned successfully']);
+    }
+
+    // Unassign a goal from the logged-in user
+    public function unassignGoal($id) {
+        $goal = Goal::findOrFail($id);
+        $user = auth()->user();
+        if (!$user->goals->contains($goal->id)) {
+            return response()->json(['message' => 'Goal not assigned to user'], 404);
+        }
+        $user->goals()->detach($goal->id);
+        return response()->json(['message' => 'Goal unassigned successfully']);
+    }
 }
