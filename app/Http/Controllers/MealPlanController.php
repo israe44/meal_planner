@@ -15,15 +15,19 @@ class MealPlanController extends Controller
     }
 
     public function store(Request $request) {
+
         $request->validate([
             'meal_id' => 'required|exists:meals,id',
             'date'    => 'required|date',
+            'meal_type' => 'required|in:breakfast,lunch,dinner,snack',
         ]);
+
 
         $mealPlan = MealPlan::create([
             'user_id' => auth()->id(),
             'meal_id' => $request->meal_id,
             'date'    => $request->date,
+            'meal_type' => $request->meal_type,
         ]);
 
         return response()->json($mealPlan, 201);
@@ -37,9 +41,11 @@ class MealPlanController extends Controller
     }
 
     public function update(Request $request, $id) {
+
         $validated = $request->validate([
             'meal_id' => 'sometimes|required|exists:meals,id', //sometimes means it's optional, but if provided it must be valid
             'date'    => 'sometimes|required|date',
+            'meal_type' => 'sometimes|required|in:breakfast,lunch,dinner,snack',
         ]);
 
         $mealPlan = MealPlan::findOrFail($id);
