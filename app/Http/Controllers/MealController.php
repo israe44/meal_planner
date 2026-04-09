@@ -10,7 +10,7 @@ class MealController extends Controller
         $meals = Meal::with('ingredients')->where('user_id', auth()->id())->get(); // only return the logged-in user's meals
         return response()->json($meals);
     }
-#shorcut for validation : $meal = Meal::create($request->validated());
+#shorcut for validation : $meal = Meal::create($request->validated());_è
     public function store (Request $request) { //$request is a package that will have all data sent by user
         $request->validate([
             'name' => 'required|string|max:255', //max 255 characters
@@ -29,6 +29,9 @@ class MealController extends Controller
 
     public function show ($id) {
         $meal = Meal::with('ingredients', 'user')->findOrFail($id); // returns 404 automatically if not found
+        if ($meal->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($meal);
     }
 
@@ -40,12 +43,18 @@ class MealController extends Controller
             'category' => 'sometimes|required|in:breakfast,lunch,dinner,snack',
         ]);
         $meal = Meal::findOrFail($id); // returns 404 automatically if not found
+        if ($meal->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $meal->update($validated);
         return response()->json($meal);
     }
 
     public function destroy ($id) {
         $meal = Meal::findOrFail($id); // returns 404 automatically if not found
+        if ($meal->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $meal->delete();
         return response()->json(['message' => 'Meal deleted successfully']);
     }
